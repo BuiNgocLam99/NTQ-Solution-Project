@@ -46,6 +46,7 @@ class SignUpController extends Controller
         array_push($accountList, $account);
 
         Session::put('accountList', $accountList);
+        
         return redirect()->route('user.sign-up')->with('success_message', 'Registered successfully!');
     }
 }

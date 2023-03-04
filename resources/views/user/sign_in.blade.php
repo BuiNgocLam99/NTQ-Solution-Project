@@ -37,11 +37,6 @@ Sign In | Velzon
                                     @csrf
 
                                     <div class="mb-3">
-                                        @if (Session::has('message'))
-                                            <div class="alert alert-primary" role="alert">
-                                                {{ Session::get('message') }}
-                                            </div>
-                                        @endif
                                         @if (Session::has('success_message'))
                                             <div class="alert alert-primary" role="alert">
                                                 {{ Session::get('success_message') }}
@@ -53,22 +48,30 @@ Sign In | Velzon
                                             </div>
                                         @endif
                                     </div>
+
                                     <div class="mb-3">
                                         <label for="username" class="form-label">Username</label>
                                         <input type="text" class="form-control" name="username" id="username" placeholder="Enter username">
-                                        @error('name')
-                                            <li><p class="text-danger">{{ $message }}</p></li>
-                                        @enderror 
+                                        @error('username')
+                                            <div class="text-danger" role="alert">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
                                     </div>
 
                                     <div class="mb-3">
                                         <div class="float-end">
-                                            {{-- <a href="{{ route('user.reset-password') }}" class="text-muted">Forgot password?</a> --}}
+                                            <a href="{{ route('user.forgot-password') }}" class="text-muted">Forgot password?</a>
                                         </div>
                                         <label class="form-label" for="password-input">Password</label>
                                         <div class="position-relative auth-pass-inputgroup mb-3">
                                             <input type="password" class="form-control pe-5 password-input" name="password" placeholder="Enter password" id="password-input">
                                             <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
+                                            @error('password')
+                                                <div class="text-danger" role="alert">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -136,4 +139,8 @@ Sign In | Velzon
     <script src="assets/js/pages/particles.app.js"></script>
     <!-- password-addon init -->
     <script src="assets/js/pages/password-addon.init.js"></script>
+    <!-- validation init -->
+    <script src="assets/js/pages/form-validation.init.js"></script>
+    <!-- password create init -->
+    <script src="assets/js/pages/passowrd-create.init.js"></script>
 @endpush
