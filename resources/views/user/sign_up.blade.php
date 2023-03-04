@@ -131,7 +131,7 @@ Sign Up | Velzon
                                     </div>
 
                                     <div class="mt-5 text-center">
-                                        <p class="mb-0">Already have an account ? <a href="" class="fw-semibold text-primary text-decoration-underline"> Signin</a> </p>
+                                        <p class="mb-0">Already have an account ? <a href="{{ route('user.sign-in') }}" class="fw-semibold text-primary text-decoration-underline"> Signin</a> </p>
                                     </div>
                                 </div>
                             </div>
@@ -165,3 +165,10 @@ Sign Up | Velzon
     <!-- end Footer -->
 </div>
 @endsection
+
+@push('scripts')
+    <!-- validation init -->
+    <script src="assets/js/pages/form-validation.init.js"></script>
+    <!-- password create init -->
+    <script src="assets/js/pages/passowrd-create.init.js"></script>
+@endpush
