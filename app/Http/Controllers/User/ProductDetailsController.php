@@ -7,9 +7,8 @@ use Illuminate\Http\Request;
 
 class ProductDetailsController extends Controller
 {
-    public function index()
-    {
-        return view('user.product-details');
+    public function index(){
+        return view('user.product_details');
     }
 
     public function fetch(Request $request)

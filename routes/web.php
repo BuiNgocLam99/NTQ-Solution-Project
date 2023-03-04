@@ -28,3 +28,4 @@ Route::post('/forgot-password', [ForgotPasswordController::class, 'postResetPass
 
 Route::get('/product-details', [ProductDetailsController::class, 'index'])->name('user.product-detail');
 Route::post('/product-details', [ProductDetailsController::class, 'fetch'])->name('user.post-product-detail');
+
