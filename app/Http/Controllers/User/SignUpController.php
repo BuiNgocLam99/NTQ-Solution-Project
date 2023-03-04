@@ -31,7 +31,7 @@ class SignUpController extends Controller
         $account = [
             'email' => $request->email,
             'username' => $request->username,
-            'password' => $request->password,
+            'password' => bcrypt($request->password),
         ];
 
         $accountList = (array)Session::get('accoutList');
