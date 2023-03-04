@@ -39,7 +39,7 @@ class SignInController extends Controller
 
             for($i = 0; $i < $length; $i++){
                 if($accountList[$i]['username'] == $username && Hash::check($password, $accountList[$i]['password'])){
-                    return redirect()->route('user.sign-in')->with('success_message', 'Sign up successfully!');
+                    return redirect()->route('user.home');
                 }
             }
         }
