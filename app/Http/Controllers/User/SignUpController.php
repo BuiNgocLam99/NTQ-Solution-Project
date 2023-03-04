@@ -34,7 +34,7 @@ class SignUpController extends Controller
             'password' => bcrypt($request->password),
         ];
 
-        $accountList = (array)Session::get('accoutList');
+        $accountList = (array)Session::get('accountList');
         $length = count($accountList);
 
         for($i = 0; $i < $length; $i++){
@@ -45,7 +45,7 @@ class SignUpController extends Controller
 
         array_push($accountList, $account);
 
-        Session::put('accoutList', $accountList);
+        Session::put('accountList', $accountList);
         return redirect()->route('user.sign-up')->with('success_message', 'Registered successfully!');
     }
 }

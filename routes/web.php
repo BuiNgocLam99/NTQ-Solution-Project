@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\User\SignInController;
 use App\Http\Controllers\User\SignUpController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,3 +17,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/sign-up', [SignUpController::class, 'index'])->name('user.sign-up');
 Route::post('/sign-up', [SignUpController::class, 'postSignUp'])->name('user.post-sign-up');
+
+Route::get('/sign-in', [SignInController::class, 'index'])->name('user.sign-in');
+Route::post('/sign-in', [SignInController::class, 'postSignIn'])->name('user.post-sign-in');
