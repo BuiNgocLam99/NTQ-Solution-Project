@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\User\ForgotPasswordController;
+use App\Http\Controllers\User\ProductDetailsController;
 use App\Http\Controllers\User\SignInController;
 use App\Http\Controllers\User\SignUpController;
 use Illuminate\Support\Facades\Route;
@@ -24,3 +25,8 @@ Route::post('/sign-in', [SignInController::class, 'postSignIn'])->name('user.pos
 
 Route::get('/forgot-password', [ForgotPasswordController::class, 'index'])->name('user.forgot-password');
 Route::post('/forgot-password', [ForgotPasswordController::class, 'postResetPassword'])->name('user.post-forgot-password');
+
+
+
+Route::get('product-details', [ProductDetailsController::class, 'index'])->name('user.product-detail');
+Route::post('product-details', [ProductDetailsController::class, 'fetch'])->name('user.post-product-detail');
