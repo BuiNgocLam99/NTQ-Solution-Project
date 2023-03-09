@@ -15,17 +15,22 @@ class SignUpController extends Controller
         return view('user.sign_up');
     }
 
-    public function postSignUp(SignUpFormRequest $request)
+    public function postSignUp(Request $request)
     {
-        $validatedData = $request->validated();
+        $request->validate([
+            'email' => 'required|email|unique:users',
+            'name' => 'required',
+            'phone_number' => 'required|numeric|digits:10',
+            'password' => 'min:8|regex:/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/',
+        ]);
 
         User::create([
-            'name' => $validatedData->name,
-            'email' => $validatedData->email,
-            'phone' => $validatedData->phone,
-            'password' => bcrypt($validatedData->password),
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'phone' => $request->phone,
         ]);
-        
+
         return response()->json([
             'success_message', 'Registered successfully!'
         ]);
