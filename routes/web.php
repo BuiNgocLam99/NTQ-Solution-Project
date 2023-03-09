@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/sign-up', [SignUpController::class, 'index'])->name('user.sign-up');
-Route::post('/sign-up', [SignUpController::class, 'postSignUp'])->name('user.post-sign-up');
+Route::post('/submit-sign-up', [SignUpController::class, 'postSignUp'])->name('user.submit-sign-up');
 
 Route::get('/sign-in', [SignInController::class, 'index'])->name('user.sign-in');
 Route::post('/sign-in', [SignInController::class, 'postSignIn'])->name('user.post-sign-in');
@@ -39,6 +39,7 @@ Route::get('/checkout', [CheckoutController::class, 'index'])->name('user.cart')
 
 // Admin Routes
 Route::get('/add-product', [AddProductsController::class, 'index'])->name('admin.add-product');
+Route::post('/submit-add-product', [AddProductsController::class, 'submitForm'])->name('admin.submit-add-product');
 
 Route::get('/products', [ProductsController::class, 'index'])->name('admin.products');
 

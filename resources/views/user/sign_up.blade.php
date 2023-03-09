@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.app')
 
 @section('title')
 Sign Up | Velzon
@@ -61,7 +61,7 @@ Sign Up | Velzon
                                     </div>
 
                                     <div class="mt-4">
-                                        <form class="needs-validation" novalidate action="" method="POST">
+                                        <form class="needs-validation myForm" novalidate action="">
                                             @csrf
 
                                             <div class="mb-3">
@@ -76,16 +76,18 @@ Sign Up | Velzon
                                             <div class="mb-3">
                                                 <label for="useremail" class="form-label">Email <span class="text-danger">*</span></label>
                                                 <input type="email" name="email" class="form-control" placeholder="Enter email address" required>
-                                                <div class="invalid-feedback">
-                                                    Please enter email
-                                                </div>
+                                                <span id="email_error" class="text-danger"></span>
                                             </div>
                                             <div class="mb-3">
-                                                <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
-                                                <input type="text" name="username" class="form-control" id="username" placeholder="Enter username" required>
-                                                <div class="invalid-feedback">
-                                                    Please enter username
-                                                </div>
+                                                <label for="name" class="form-label">Name <span class="text-danger">*</span></label>
+                                                <input type="text" name="name" class="form-control" id="name" placeholder="Enter username" required>
+                                                <span id="name_error" class="text-danger"></span>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="username" class="form-label">Phone number <span class="text-danger">*</span></label>
+                                                <input type="text" name="phone_number" class="form-control" id="phone_number" placeholder="Enter phone number" required>
+                                                <span id="phone_number_error" class="text-danger"></span>
                                             </div>
 
                                             <div class="mb-3">
@@ -93,10 +95,8 @@ Sign Up | Velzon
                                                 <div class="position-relative auth-pass-inputgroup">
                                                     <input type="password" name="password" class="form-control pe-5 password-input" onpaste="return false" placeholder="Enter password" id="password-input" aria-describedby="passwordInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
                                                     <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
-                                                    <div class="invalid-feedback">
-                                                        Please enter password
-                                                    </div>
                                                 </div>
+                                                <span id="password_error" class="text-danger"></span>
                                             </div>
 
                                             <div class="mb-4">
@@ -164,6 +164,35 @@ Sign Up | Velzon
     </footer>
     <!-- end Footer -->
 </div>
+
+<script>
+    $(document).ready(function(){
+        $('.myForm').submit(function(e){
+            e.preventDefault();
+            var formData = new FormData(this);
+
+            $.ajax({
+                url: "{{ route('user.submit-sign-up') }}",
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response){
+                    console.log('thanh cong' + response);
+                },
+                error: function(reject){
+                    var response = $.parseJSON(reject.responseText);
+                    $('span[id*="_error"]').each(function() {
+                        $(this).text('');
+                    });
+                    $.each(response.errors, function(key, val){
+                        $("#" + key + "_error").text(val[0]);
+                    })
+                }
+            })
+        })
+    })
+</script>
 @endsection
 
 @push('scripts')

@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.app')
 
 @section('title')
 Create Product | Velzon - Admin
@@ -143,7 +143,7 @@ Create Product | Velzon - Admin
                             <div class="form-group m-0">
                                 <div class="input-group">
                                     <input type="text" class="form-control" placeholder="Search ..." aria-label="Recipient's username">
-                                    <button class="btn btn-primary" type="submit"><i class="mdi mdi-magnify"></i></button>
+                                    <button class="btn btn-primary" type="button"><i class="mdi mdi-magnify"></i></button>
                                 </div>
                             </div>
                         </form>
@@ -1831,7 +1831,8 @@ Create Product | Velzon - Admin
                     </div>
                     <!-- end page title -->
 
-                    <form id="createproduct-form" autocomplete="off" class="needs-validation" novalidate>
+                    <form id="createproduct-form" autocomplete="off" class="needs-validation myForm" novalidate enctype="multipart/form-data"> 
+                    @csrf
                         <div class="row">
                             <div class="col-lg-8">
                                 <div class="card">
@@ -1840,21 +1841,24 @@ Create Product | Velzon - Admin
                                             <label class="form-label" for="product-title-input">Product Title</label>
                                             <input type="hidden" class="form-control" id="formAction" name="formAction" value="add">
                                             <input type="text" class="form-control d-none" id="product-id-input">
-                                            <input type="text" class="form-control" id="product-title-input" value="" placeholder="Enter product title" required>
+                                            <input type="text" name="title" class="form-control" id="product-title-input" value="{{ old('title') }}" placeholder="Enter product title" required>
                                             <div class="invalid-feedback">Please Enter a product title.</div>
+                                            <span id="title_error" class="text-danger"></span>
                                         </div>
                                         <div>
                                             <label>Product Description</label>
 
-                                            <div id="ckeditor-classic">
-                                                <p>Tommy Hilfiger men striped pink sweatshirt. Crafted with cotton. Material composition is 100% organic cotton. This is one of the world’s leading designer lifestyle brands and is internationally recognized for celebrating the essence of classic American cool style, featuring preppy with a twist designs.</p>
+                                            <textarea id="ckeditor-classic" name="description" >
+                                                {{ old('description') }}
+                                                {{-- <p>Tommy Hilfiger men striped pink sweatshirt. Crafted with cotton. Material composition is 100% organic cotton. This is one of the world’s leading designer lifestyle brands and is internationally recognized for celebrating the essence of classic American cool style, featuring preppy with a twist designs.</p>
                                                 <ul>
                                                     <li>Full Sleeve</li>
                                                     <li>Cotton</li>
                                                     <li>All Sizes available</li>
                                                     <li>4 Different Color</li>
-                                                </ul>
-                                            </div>
+                                                </ul> --}}
+                                            </textarea>
+                                            <span id="description_error" class="text-danger"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -1868,6 +1872,8 @@ Create Product | Velzon - Admin
                                         <div class="mb-4">
                                             <h5 class="fs-14 mb-1">Product Image</h5>
                                             <p class="text-muted">Add Product main Image.</p>
+                                            <span id="main_image_error" class="text-danger"></span>
+
                                             <div class="text-center">
                                                 <div class="position-relative d-inline-block">
                                                     <div class="position-absolute top-100 start-100 translate-middle">
@@ -1878,7 +1884,8 @@ Create Product | Velzon - Admin
                                                                 </div>
                                                             </div>
                                                         </label>
-                                                        <input class="form-control d-none" value="" id="product-image-input" type="file" accept="image/png, image/gif, image/jpeg">
+                                                        <input class="form-control d-none" name="main_image" id="product-image-input" type="file" accept="image/png, image/gif, image/jpeg">
+                                                        
                                                     </div>
                                                     <div class="avatar-lg">
                                                         <div class="avatar-title bg-light rounded">
@@ -1891,10 +1898,10 @@ Create Product | Velzon - Admin
                                         <div>
                                             <h5 class="fs-14 mb-1">Product Gallery</h5>
                                             <p class="text-muted">Add Product Gallery Images.</p>
-
+                                            <span id="gallery_images_error" class="text-danger"></span>
                                             <div class="dropzone">
                                                 <div class="fallback">
-                                                    <input name="file" type="file" multiple="multiple">
+                                                    <input name="gallery_images[]" type="file" multiple="multiple">
                                                 </div>
                                                 <div class="dz-message needsclick">
                                                     <div class="mb-3">
@@ -1958,13 +1965,15 @@ Create Product | Velzon - Admin
                                                     <div class="col-lg-6">
                                                         <div class="mb-3">
                                                             <label class="form-label" for="manufacturer-name-input">Manufacturer Name</label>
-                                                            <input type="text" class="form-control" id="manufacturer-name-input" placeholder="Enter manufacturer name">
+                                                            <input type="text" class="form-control" name="manufacturer_name" value="{{ old('manufacturer_name') }}" id="manufacturer-name-input" placeholder="Enter manufacturer name">
+                                                            <span id="manufacturer_name_error" class="text-danger"></span>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-6">
                                                         <div class="mb-3">
                                                             <label class="form-label" for="manufacturer-brand-input">Manufacturer Brand</label>
-                                                            <input type="text" class="form-control" id="manufacturer-brand-input" placeholder="Enter manufacturer brand">
+                                                            <input type="text" class="form-control" name="manufacturer_brand" value="{{ old('manufacturer_brand') }}" id="manufacturer-brand-input" placeholder="Enter manufacturer brand">
+                                                            <span id="manufacturer_brand_error" class="text-danger"></span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1974,7 +1983,8 @@ Create Product | Velzon - Admin
                                                     <div class="col-lg-3 col-sm-6">
                                                         <div class="mb-3">
                                                             <label class="form-label" for="stocks-input">Stocks</label>
-                                                            <input type="text" class="form-control" id="stocks-input" placeholder="Stocks" required>
+                                                            <input type="text" name="stocks" value="{{ old('stocks') }}" class="form-control" id="stocks-input" placeholder="Stocks" required>
+                                                            <span id="stocks_error" class="text-danger"></span>
                                                             <div class="invalid-feedback">Please Enter a product stocks.</div>
                                                         </div>
                                                     </div>
@@ -1983,7 +1993,8 @@ Create Product | Velzon - Admin
                                                             <label class="form-label" for="product-price-input">Price</label>
                                                             <div class="input-group has-validation mb-3">
                                                                 <span class="input-group-text" id="product-price-addon">$</span>
-                                                                <input type="text" class="form-control" id="product-price-input" placeholder="Enter price" aria-label="Price" aria-describedby="product-price-addon" required>
+                                                                <input type="text" name="price" value="{{ old('price') }}" class="form-control" id="product-price-input" placeholder="Enter price" aria-label="Price" aria-describedby="product-price-addon" required>
+                                                                <span id="price_error" class="text-danger"></span>
                                                                 <div class="invalid-feedback">Please Enter a product price.</div>
                                                             </div>
 
@@ -1994,14 +2005,16 @@ Create Product | Velzon - Admin
                                                             <label class="form-label" for="product-discount-input">Discount</label>
                                                             <div class="input-group mb-3">
                                                                 <span class="input-group-text" id="product-discount-addon">%</span>
-                                                                <input type="text" class="form-control" id="product-discount-input" placeholder="Enter discount" aria-label="discount" aria-describedby="product-discount-addon">
+                                                                <input type="text" name="discount" value="{{ old('discount') }}" class="form-control" id="product-discount-input" placeholder="Enter discount" aria-label="discount" aria-describedby="product-discount-addon">
+                                                                <span id="discount_error" class="text-danger"></span>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-3 col-sm-6">
                                                         <div class="mb-3">
                                                             <label class="form-label" for="orders-input">Orders</label>
-                                                            <input type="text" class="form-control" id="orders-input" placeholder="Orders" required>
+                                                            <input type="text" name="orders" value="{{ old('orders') }}" class="form-control" id="orders-input" placeholder="Orders" required>
+                                                            <span id="orders_error" class="text-danger"></span>
                                                             <div class="invalid-feedback">Please Enter a product orders.</div>
                                                         </div>
                                                     </div>
@@ -2016,7 +2029,8 @@ Create Product | Velzon - Admin
                                                     <div class="col-lg-6">
                                                         <div class="mb-3">
                                                             <label class="form-label" for="meta-title-input">Meta title</label>
-                                                            <input type="text" class="form-control" placeholder="Enter meta title" id="meta-title-input">
+                                                            <input type="text" name="meta_title" value="{{ old('meta_title') }}" class="form-control" placeholder="Enter meta title" id="meta-title-input">
+                                                            <span id="meta_title_error" class="text-danger"></span>
                                                         </div>
                                                     </div>
                                                     <!-- end col -->
@@ -2024,7 +2038,8 @@ Create Product | Velzon - Admin
                                                     <div class="col-lg-6">
                                                         <div class="mb-3">
                                                             <label class="form-label" for="meta-keywords-input">Meta Keywords</label>
-                                                            <input type="text" class="form-control" placeholder="Enter meta keywords" id="meta-keywords-input">
+                                                            <input type="text" name="meta_keywords" value="{{ old('meta_keywords') }}" class="form-control" placeholder="Enter meta keywords" id="meta-keywords-input">
+                                                            <span id="meta_keywords_error" class="text-danger"></span>
                                                         </div>
                                                     </div>
                                                     <!-- end col -->
@@ -2033,7 +2048,10 @@ Create Product | Velzon - Admin
 
                                                 <div>
                                                     <label class="form-label" for="meta-description-input">Meta Description</label>
-                                                    <textarea class="form-control" id="meta-description-input" placeholder="Enter meta description" rows="3"></textarea>
+                                                    <textarea class="form-control" name="meta_description" id="meta-description-input" placeholder="Enter meta description" rows="3">
+                                                        {{ old('meta_description') }}
+                                                    </textarea>
+                                                    <span id="meta_description_error" class="text-danger"></span>
                                                 </div>
                                             </div>
                                             <!-- end tab pane -->
@@ -2044,7 +2062,7 @@ Create Product | Velzon - Admin
                                 </div>
                                 <!-- end card -->
                                 <div class="text-end mb-3">
-                                    <button type="submit" class="btn btn-primary w-sm">Submit</button>
+                                    <button type="submit" id="submitForm" class="btn btn-primary w-sm">Submit</button>
                                 </div>
                             </div>
                             <!-- end col -->
@@ -2058,19 +2076,21 @@ Create Product | Velzon - Admin
                                         <div class="mb-3">
                                             <label for="choices-publish-status-input" class="form-label">Status</label>
 
-                                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false>
+                                            <select class="form-select" name="status" id="choices-publish-status-input" data-choices data-choices-search-false>
                                                 <option value="Published" selected>Published</option>
                                                 <option value="Scheduled">Scheduled</option>
                                                 <option value="Draft">Draft</option>
                                             </select>
+                                            <span id="status_error" class="text-danger"></span>
                                         </div>
 
                                         <div>
                                             <label for="choices-publish-visibility-input" class="form-label">Visibility</label>
-                                            <select class="form-select" id="choices-publish-visibility-input" data-choices data-choices-search-false>
+                                            <select class="form-select" name="visibility" id="choices-publish-visibility-input" data-choices data-choices-search-false>
                                                 <option value="Public" selected>Public</option>
                                                 <option value="Hidden">Hidden</option>
                                             </select>
+                                            <span id="visibility_error" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <!-- end card body -->
@@ -2085,7 +2105,8 @@ Create Product | Velzon - Admin
                                     <div class="card-body">
                                         <div>
                                             <label for="datepicker-publish-input" class="form-label">Publish Date & Time</label>
-                                            <input type="text" id="datepicker-publish-input" class="form-control" placeholder="Enter publish date" data-provider="flatpickr" data-date-format="d.m.y" data-enable-time>
+                                            <input type="text" name="publish_date_time" value="{{ old('publish_date_time') }}" id="datepicker-publish-input" class="form-control" placeholder="Enter publish date" data-provider="flatpickr" data-date-format="d.m.y" data-enable-time>
+                                            <span id="publish_date_time_error" class="text-danger"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -2098,7 +2119,7 @@ Create Product | Velzon - Admin
                                     <div class="card-body">
                                         <p class="text-muted mb-2"> <a href="#" class="float-end text-decoration-underline">Add
                                                 New</a>Select product category</p>
-                                        <select class="form-select" id="choices-category-input" name="choices-category-input" data-choices data-choices-search-false>
+                                        <select class="form-select" name="product_categories" id="choices-category-input" name="choices-category-input" data-choices data-choices-search-false>
                                             <option value="Appliances">Appliances</option>
                                             <option value="Automotive Accessories">Automotive Accessories</option>
                                             <option value="Electronics">Electronics</option>
@@ -2108,6 +2129,7 @@ Create Product | Velzon - Admin
                                             <option value="Kids">Kids</option>
                                             <option value="Watches">Watches</option>
                                         </select>
+                                        <span id="product_categories_error" class="text-danger"></span>
                                     </div>
                                     <!-- end card body -->
                                 </div>
@@ -2119,7 +2141,8 @@ Create Product | Velzon - Admin
                                     <div class="card-body">
                                         <div class="hstack gap-3 align-items-start">
                                             <div class="flex-grow-1">
-                                                <input class="form-control" data-choices data-choices-multiple-remove="true" placeholder="Enter tags" type="text" value="Cotton" />
+                                                <input class="form-control" name="product_tags" value="{{ old('product_tags') }}" data-choices data-choices-multiple-remove="true" placeholder="Enter tags" type="text" value="Cotton" />
+                                            <span id="product_tags_error" class="text-danger"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -2133,7 +2156,10 @@ Create Product | Velzon - Admin
                                     </div>
                                     <div class="card-body">
                                         <p class="text-muted mb-2">Add short description for product</p>
-                                        <textarea class="form-control" placeholder="Must enter minimum of a 100 characters" rows="3"></textarea>
+                                        <textarea class="form-control" name="short_description" placeholder="Must enter minimum of a 100 characters" rows="3">
+                                            {{ old('short_description') }}
+                                        </textarea>
+                                        <span id="short_description_error" class="text-danger"></span>
                                     </div>
                                     <!-- end card body -->
                                 </div>
@@ -2855,6 +2881,37 @@ Create Product | Velzon - Admin
             </div>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function(){
+            $('.myForm').submit(function(e){
+            e.preventDefault();
+            var formData = new FormData(this);
+            
+            $.ajax({
+                url: "{{ route('admin.submit-add-product') }}",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response){
+                    console.log(response);
+                },
+                error: function(reject){
+                    console.log('loi');
+                    var response = $.parseJSON(reject.responseText);
+                    $('span[id*="_error"]').each(function() {
+                        $(this).text('');
+                    });
+                    $.each(response.errors, function(key, val){
+                        $("#" + key + "_error").text(val[0]);
+                    })
+
+                }
+            })
+        })
+        })
+    </script>
 @endsection
 
 @push('scripts')
