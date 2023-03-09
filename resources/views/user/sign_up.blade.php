@@ -58,6 +58,7 @@ Sign Up | Velzon
                                     <div>
                                         <h5 class="text-primary">Register Account</h5>
                                         <p class="text-muted">Get your Free Velzon account now.</p>
+                                        <h3 id="message" class="text-success"></h3>
                                     </div>
 
                                     <div class="mt-4">
@@ -121,10 +122,10 @@ Sign Up | Velzon
                                                 </div>
 
                                                 <div>
-                                                    <button type="button" class="btn btn-primary btn-icon waves-effect waves-light"><i class="ri-facebook-fill fs-16"></i></button>
-                                                    <button type="button" class="btn btn-danger btn-icon waves-effect waves-light"><i class="ri-google-fill fs-16"></i></button>
-                                                    <button type="button" class="btn btn-dark btn-icon waves-effect waves-light"><i class="ri-github-fill fs-16"></i></button>
-                                                    <button type="button" class="btn btn-info btn-icon waves-effect waves-light"><i class="ri-twitter-fill fs-16"></i></button>
+                                                    <a href="https://www.facebook.com/" class="btn btn-primary btn-icon waves-effect waves-light"><i class="ri-facebook-fill fs-16"></i></a>
+                                                    <a href="https://www.google.com/" class="btn btn-danger btn-icon waves-effect waves-light"><i class="ri-google-fill fs-16"></i></a>
+                                                    <a href="https://www.github.com/" class="btn btn-dark btn-icon waves-effect waves-light"><i class="ri-github-fill fs-16"></i></a>
+                                                    <a href="https://www.twitter.com/" class="btn btn-info btn-icon waves-effect waves-light"><i class="ri-twitter-fill fs-16"></i></a>
                                                 </div>
                                             </div>
                                         </form>
@@ -178,7 +179,7 @@ Sign Up | Velzon
                 contentType: false,
                 processData: false,
                 success: function(response){
-                    console.log('thanh cong' + response);
+                    $('#message').text(response[1])
                 },
                 error: function(reject){
                     var response = $.parseJSON(reject.responseText);
