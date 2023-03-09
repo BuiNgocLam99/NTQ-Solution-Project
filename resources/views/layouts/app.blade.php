@@ -11,6 +11,8 @@
 
     @include('layouts.styles')
 
+    @livewireStyles
+
     @stack('styles')
 </head>
 <body>
@@ -18,6 +20,8 @@
     @yield('content')
 
     @include('layouts.scripts')
+
+    @livewireScripts
 
     @stack('scripts')
 </body>
