@@ -30,7 +30,7 @@ class SignUpController extends Controller
         ]);
 
         return response()->json([
-            'success_message', 'Registered successfully!'
+            'success_message', 'Registered successfully!',
         ]);
     }
 }
