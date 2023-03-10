@@ -11,7 +11,7 @@ class SignUpFormRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -22,10 +22,7 @@ class SignUpFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email',
-            'name' => 'required',
-            'phone_number' => 'required|regex:/^\+?[0-9]{1,3}[ .-]?(\([0-9]{1,}\)|[0-9]{1,})[ .-]?[0-9]{1,}([ .-]?[0-9]{1,}){0,}$/',
-            'password' => 'min:8|regex:/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/',
+            
         ];
     }
 }

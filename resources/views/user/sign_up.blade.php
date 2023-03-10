@@ -81,12 +81,12 @@ Sign Up | Velzon
                                             </div>
                                             <div class="mb-3">
                                                 <label for="name" class="form-label">Name <span class="text-danger">*</span></label>
-                                                <input type="text" name="name" class="form-control" id="name" placeholder="Enter username" required>
+                                                <input type="text" name="name" class="form-control" id="name" placeholder="Enter name" required>
                                                 <span id="name_error" class="text-danger"></span>
                                             </div>
 
                                             <div class="mb-3">
-                                                <label for="username" class="form-label">Phone number <span class="text-danger">*</span></label>
+                                                <label for="phone_number" class="form-label">Phone number <span class="text-danger">*</span></label>
                                                 <input type="text" name="phone_number" class="form-control" id="phone_number" placeholder="Enter phone number" required>
                                                 <span id="phone_number_error" class="text-danger"></span>
                                             </div>
@@ -122,10 +122,10 @@ Sign Up | Velzon
                                                 </div>
 
                                                 <div>
-                                                    <a href="https://www.facebook.com/" class="btn btn-primary btn-icon waves-effect waves-light"><i class="ri-facebook-fill fs-16"></i></a>
-                                                    <a href="https://www.google.com/" class="btn btn-danger btn-icon waves-effect waves-light"><i class="ri-google-fill fs-16"></i></a>
-                                                    <a href="https://www.github.com/" class="btn btn-dark btn-icon waves-effect waves-light"><i class="ri-github-fill fs-16"></i></a>
-                                                    <a href="https://www.twitter.com/" class="btn btn-info btn-icon waves-effect waves-light"><i class="ri-twitter-fill fs-16"></i></a>
+                                                    <a href="https://www.facebook.com/" target="_blank" class="btn btn-primary btn-icon waves-effect waves-light"><i class="ri-facebook-fill fs-16"></i></a>
+                                                    <a href="https://www.google.com/" target="_blank" class="btn btn-danger btn-icon waves-effect waves-light"><i class="ri-google-fill fs-16"></i></a>
+                                                    <a href="https://www.github.com/" target="_blank" class="btn btn-dark btn-icon waves-effect waves-light"><i class="ri-github-fill fs-16"></i></a>
+                                                    <a href="https://www.twitter.com/" target="_blank" class="btn btn-info btn-icon waves-effect waves-light"><i class="ri-twitter-fill fs-16"></i></a>
                                                 </div>
                                             </div>
                                         </form>
