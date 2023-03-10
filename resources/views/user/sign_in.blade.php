@@ -33,30 +33,17 @@ Sign In | Velzon
                                 <p class="text-muted">Sign in to continue to Velzon.</p>
                             </div>
                             <div class="p-2 mt-4">
-                                <form action="" method="POST">
+                                <form id="myForm">
                                     @csrf
-
+                                    
                                     <div class="mb-3">
-                                        @if (Session::has('success_message'))
-                                            <div class="alert alert-primary" role="alert">
-                                                {{ Session::get('success_message') }}
-                                            </div>
-                                        @endif
-                                        @if (Session::has('error_message'))
-                                            <div class="alert alert-danger" role="alert">
-                                                {{ Session::get('error_message') }}
-                                            </div>
-                                        @endif
-                                    </div>
-
+                                        <div id="error_message" class="text-danger"></div>                                    
+                                    </div>  
+                                    
                                     <div class="mb-3">
-                                        <label for="username" class="form-label">Username</label>
-                                        <input type="text" class="form-control" name="username" id="username" placeholder="Enter username">
-                                        @error('username')
-                                            <div class="text-danger" role="alert">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="text" class="form-control" name="email" id="email" placeholder="Enter email">
+                                        <span id="email_error" class="text-danger"></span>
                                     </div>
 
                                     <div class="mb-3">
@@ -67,16 +54,12 @@ Sign In | Velzon
                                         <div class="position-relative auth-pass-inputgroup mb-3">
                                             <input type="password" class="form-control pe-5 password-input" name="password" placeholder="Enter password" id="password-input">
                                             <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
-                                            @error('password')
-                                                <div class="text-danger" role="alert">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
+                                            <span id="password_error" class="text-danger"></span>
                                         </div>
                                     </div>
 
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="auth-remember-check">
+                                        <input class="form-check-input" type="checkbox" name="remember_me" id="auth-remember-check">
                                         <label class="form-check-label" for="auth-remember-check">Remember me</label>
                                     </div>
 
@@ -103,7 +86,7 @@ Sign In | Velzon
                     <!-- end card -->
 
                     <div class="mt-4 text-center">
-                        <p class="mb-0">Don't have an account ? <a href="{{ route('user.post-sign-up') }}" class="fw-semibold text-primary text-decoration-underline"> Signup </a> </p>
+                        <p class="mb-0">Don't have an account ? <a href="{{ route('user.submit-sign-up') }}" class="fw-semibold text-primary text-decoration-underline"> Signup </a> </p>
                     </div>
 
                 </div>
@@ -130,6 +113,43 @@ Sign In | Velzon
     </footer>
     <!-- end Footer -->
 </div>
+<script>
+    $(document).ready(function(){
+        $('#myForm').submit(function(e){
+            e.preventDefault();
+            var formData = new FormData(this);
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url: "{{ route('user.submit-sign-in') }}",
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response){
+                    if(response.error_message){
+                        return $('#error_message').text(response.error_message);
+                    }
+                    window.location.assign(response.url);
+                },
+                error: function(reject){
+                    var response = $.parseJSON(reject.responseText);
+                    $('span[id*="_error"]').each(function() {
+                        $(this).text('');
+                    });
+                    $.each(response.errors, function(key, val){
+                        $("#" + key + "_error").text(val[0]);
+                    })
+                }
+            })
+        })
+    })
+</script>
 @endsection
 
 @push('scripts')
