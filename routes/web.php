@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ProductsController;
 use App\Http\Controllers\User\CartController;
 use App\Http\Controllers\User\CheckoutController;
 use App\Http\Controllers\User\ForgotPasswordController;
+use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\User\SignInController;
 use App\Http\Controllers\User\SignUpController;
 use Illuminate\Support\Facades\Route;
@@ -26,10 +27,12 @@ Route::get('/sign-up', [SignUpController::class, 'index'])->name('user.sign-up')
 Route::post('/submit-sign-up', [SignUpController::class, 'postSignUp'])->name('user.submit-sign-up');
 
 Route::get('/sign-in', [SignInController::class, 'index'])->name('user.sign-in');
-Route::post('/sign-in', [SignInController::class, 'postSignIn'])->name('user.post-sign-in');
+Route::post('/sign-in', [SignInController::class, 'postSignIn'])->name('user.submit-sign-in');
 
 Route::get('/forgot-password', [ForgotPasswordController::class, 'index'])->name('user.forgot-password');
 Route::post('/forgot-password', [ForgotPasswordController::class, 'postResetPassword'])->name('user.post-forgot-password');
+
+Route::get('/', [HomeController::class, 'index'])->name('user.home');
 
 
 
