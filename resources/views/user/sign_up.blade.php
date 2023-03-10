@@ -58,6 +58,7 @@ Sign Up | Velzon
                                     <div>
                                         <h5 class="text-primary">Register Account</h5>
                                         <p class="text-muted">Get your Free Velzon account now.</p>
+                                        <h3 id="message" class="text-success"></h3>
                                     </div>
 
                                     <div class="mt-4">
@@ -178,7 +179,7 @@ Sign Up | Velzon
                 contentType: false,
                 processData: false,
                 success: function(response){
-                    console.log(response);
+                    $('#message').text(response[1])
                 },
                 error: function(reject){
                     var response = $.parseJSON(reject.responseText);
