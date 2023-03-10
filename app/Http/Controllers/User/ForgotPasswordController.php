@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Mail\ForgotPasswordMail;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
@@ -21,29 +22,21 @@ class ForgotPasswordController extends Controller
         $request->validate(
             [
                 'email' => 'required|email',
-            ],
-            [
-                'required' => 'This field is required',
             ]
         );
 
         $email = $request->email;
+        $user = User::where('email', $email)->first();
 
-        if(Session::has('accountList')){
-            $accountList = (array)Session::get('accountList');
-            $length = count($accountList);
+        if ($user) {
+            $newPassword = Str::random(10);
+            Mail::to($email)->send(new ForgotPasswordMail($newPassword));
+            $user->password = bcrypt($newPassword);
+            $user->save();
 
-            for($i = 0; $i < $length; $i++){
-                if($accountList[$i]['email'] == $email){
-                    $newPassword = Str::random(10); 
-                    $mailable = new ForgotPasswordMail($newPassword);
-                    Mail::to($email)->send($mailable);
-                    $accountList[$i]['password'] = bcrypt($newPassword);
-                    Session::put('accountList', $accountList);
-                    return redirect()->route('user.forgot-password')->with('success_message', 'Please check your email!');
-                }
-            }
+            return response()->json(['success_message' => 'We have been sending password to your email!']);
+        } else {
+            return response()->json(['error_message' => 'Your email is not existed in our records!']);
         }
-        return redirect()->route('user.forgot-password')->with('error_message', 'Your email is not exist in our records!');
     }
 }

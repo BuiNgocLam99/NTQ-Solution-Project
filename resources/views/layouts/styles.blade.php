@@ -13,3 +13,6 @@
 <link href="assets/css/custom.min.css" rel="stylesheet" type="text/css" />
 <!-- ajax -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+<!-- my custom -->
+<link href="assets/css/myCustom.css" rel="stylesheet" type="text/css" />
