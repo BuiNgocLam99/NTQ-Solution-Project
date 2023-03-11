@@ -5,6 +5,11 @@ Sign Up | Velzon
 @endsection
 
 @section('content')
+<div class="spinner-container">
+    <div class="spinner-border spinner" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
 <div class="auth-page-wrapper auth-bg-cover py-5 d-flex justify-content-center align-items-center min-vh-100">
     <div class="bg-overlay"></div>
     <!-- auth-page content -->
@@ -168,9 +173,25 @@ Sign Up | Velzon
 
 <script>
     $(document).ready(function(){
+        
+        $(".spinner-container").hide();
+
         $('.myForm').submit(function(e){
             e.preventDefault();
+
+            $(".spinner-container").show();
+
             var formData = new FormData(this);
+
+            var fieldNames = [...formData.keys()];
+
+            var filteredFieldNames = fieldNames.filter(function(fieldName) {
+                return fieldName !== '_token';
+            });
+
+            $.each(filteredFieldNames, function(key, value) {
+                $('span[id="' + value + '_error"]').text('');
+            });
 
             $.ajax({
                 url: "{{ route('user.submit-sign-up') }}",
@@ -178,6 +199,9 @@ Sign Up | Velzon
                 data: formData,
                 contentType: false,
                 processData: false,
+                beforeSend: function() {
+                    $('.spinner').show();
+                },
                 success: function(response){
                     $('#message').text(response[1])
                 },
@@ -189,6 +213,9 @@ Sign Up | Velzon
                     $.each(response.errors, function(key, val){
                         $("#" + key + "_error").text(val[0]);
                     })
+                },
+                complete: function() {
+                    $(".spinner-container").hide();
                 }
             })
         })

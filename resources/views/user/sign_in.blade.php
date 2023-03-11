@@ -5,6 +5,11 @@ Sign In | Velzon
 @endsection
 
 @section('content')
+<div class="spinner-container">
+    <div class="spinner-border spinner" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
 <div class="auth-page-wrapper pt-5">
     <!-- auth page content -->
     <div class="auth-page-content">
@@ -86,7 +91,7 @@ Sign In | Velzon
                     <!-- end card -->
 
                     <div class="mt-4 text-center">
-                        <p class="mb-0">Don't have an account ? <a href="{{ route('user.submit-sign-up') }}" class="fw-semibold text-primary text-decoration-underline"> Signup </a> </p>
+                        <p class="mb-0">Don't have an account ? <a href="{{ route('user.sign-up') }}" class="fw-semibold text-primary text-decoration-underline"> Signup </a> </p>
                     </div>
 
                 </div>
@@ -115,9 +120,25 @@ Sign In | Velzon
 </div>
 <script>
     $(document).ready(function(){
+        $(".spinner-container").hide();
+
         $('#myForm').submit(function(e){
+
             e.preventDefault();
+
+            $(".spinner-container").show();
+
             var formData = new FormData(this);
+
+            var fieldNames = [...formData.keys()];
+
+            var filteredFieldNames = fieldNames.filter(function(fieldName) {
+                return fieldName !== '_token';
+            });
+
+            $.each(filteredFieldNames, function(key, value) {
+                $('span[id="' + value + '_error"]').text('');
+            });
 
             $.ajaxSetup({
                 headers: {
@@ -131,6 +152,9 @@ Sign In | Velzon
                 data: formData,
                 contentType: false,
                 processData: false,
+                beforeSend: function() {
+                    $('.spinner').show();
+                },
                 success: function(response){
                     if(response.error_message){
                         return $('#error_message').text(response.error_message);
@@ -145,6 +169,9 @@ Sign In | Velzon
                     $.each(response.errors, function(key, val){
                         $("#" + key + "_error").text(val[0]);
                     })
+                },
+                complete: function() {
+                    $(".spinner-container").hide();
                 }
             })
         })
