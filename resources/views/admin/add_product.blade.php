@@ -2898,7 +2898,6 @@ Create Product | Velzon - Admin
                     console.log(response);
                 },
                 error: function(reject){
-                    console.log('loi');
                     var response = $.parseJSON(reject.responseText);
                     $('span[id*="_error"]').each(function() {
                         $(this).text('');
