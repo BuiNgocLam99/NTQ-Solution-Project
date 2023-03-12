@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductFormRequest;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
@@ -13,30 +14,40 @@ class AddProductsController extends Controller
 {
     public function index()
     {
-        return view('admin.add_product');
+        $categories = Category::all();
+        return view('admin.add_product', compact('categories'));
     }
 
-    public function submitForm(Request $request){
-        // $validatedData = $request->validated();
+    public function submitForm(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|unique:products',
+            'description' => 'required|string',
+            'main_image' => 'required|mimes:jpeg,jpg,png,gif|max:4000',
+            'gallery_images.*' => 'image|mimes:jpeg,jpg,png,gif|max:4000',
+            'gallery_images' => 'required|array',
+            'categories_id' => 'required|numeric',
+        ]);
 
-        // $slug = Str::slug($request->title);
-        // $uploadedFileUrl = Cloudinary::upload($request->file('main_image')->getRealPath())->getSecurePath();
+        $slug = Str::slug($request->title);
 
-        $gallery_images = $request->gallery_images;
-        foreach ($gallery_images as $images) {
-            
+        $main_image_url = Cloudinary::upload($request->file('main_image')->getRealPath())->getSecurePath();
+
+        $gallery_image_urls = [];
+        foreach ($request->file('gallery_images') as $image) {
+            $uploaded = Cloudinary::upload($image->getRealPath())->getSecurePath();
+            array_push($gallery_image_urls, $uploaded);
         }
 
-        // Product::create([
-        //     'title' => $validatedData->title,
-        //     'slug' => $slug,
-        //     'description' => $validatedData->description,
-        //     'short_description' => $validatedData->short_description,
-        //     'main_image' => $uploadedFileUrl,
-        //     'gallery_images' => $validatedData->,
-        //     'product_tags' => $validatedData->,
-        // ]);
+        Product::create([
+            'title' => $request->title,
+            'slug' => $slug,
+            'description' => $request->description,
+            'main_image' => $main_image_url,
+            'gallery_images' => json_encode($gallery_image_urls),
+            'category_id' => $request->categories_id,
+        ]);
 
-        return response()->json(['response' => compact('title', 'description', 'main_image', 'gallery_images')]);
+        return response()->json(['success_message' => 'Product have created successfully!']);
     }
 }

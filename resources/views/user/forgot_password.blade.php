@@ -136,7 +136,6 @@
                         $('.spinner').show();
                     },
                     success: function(response) {
-                        console.log(response.success_message);
                         if (response.success_message) {
                             $('#message').removeClass('text-danger').addClass('text-success')
                                 .text(response.success_message);

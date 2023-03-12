@@ -10,6 +10,11 @@ Create Product | Velzon - Admin
 @endpush
 
 @section('content')
+<div class="spinner-container">
+    <div class="spinner-border spinner" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
     <div id="layout-wrapper">
 
         <header id="page-topbar">
@@ -1818,7 +1823,7 @@ Create Product | Velzon - Admin
                         <div class="col-12">
                             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                                 <h4 class="mb-sm-0">Create Product</h4>
-
+                                <h4 id="message" class=""></h4>
                                 <div class="page-title-right">
                                     <ol class="breadcrumb m-0">
                                         <li class="breadcrumb-item"><a href="javascript: void(0);">Ecommerce</a></li>
@@ -1837,6 +1842,15 @@ Create Product | Velzon - Admin
                             <div class="col-lg-8">
                                 <div class="card">
                                     <div class="card-body">
+                                        <div class="mb-3">
+                                            <label for="choices-publish-status-input" class="form-label">Category</label>
+                                            <select class="form-select" name="status" id="choices-publish-status-input" data-choices data-choices-search-false>
+                                                @foreach ($categories as $category)
+                                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            <span id="category_error" class="text-danger"></span>
+                                        </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="product-title-input">Product Title</label>
                                             <input type="hidden" class="form-control" id="formAction" name="formAction" value="add">
@@ -1899,9 +1913,11 @@ Create Product | Velzon - Admin
                                             <h5 class="fs-14 mb-1">Product Gallery</h5>
                                             <p class="text-muted">Add Product Gallery Images.</p>
                                             <span id="gallery_images_error" class="text-danger"></span>
-                                            <div class="dropzone">
+                                            <input name="gallery_images[]" type="file" multiple>
+
+                                            {{-- <div class="dropzone">
                                                 <div class="fallback">
-                                                    <input name="gallery_images[]" type="file" multiple="multiple">
+                                                    <input name="gallery_images[]" type="file" multiple>
                                                 </div>
                                                 <div class="dz-message needsclick">
                                                     <div class="mb-3">
@@ -1935,7 +1951,7 @@ Create Product | Velzon - Admin
                                                         </div>
                                                     </div>
                                                 </li>
-                                            </ul>
+                                            </ul> --}}
                                             <!-- end dropzon-preview -->
                                         </div>
                                     </div>
@@ -2119,15 +2135,10 @@ Create Product | Velzon - Admin
                                     <div class="card-body">
                                         <p class="text-muted mb-2"> <a href="#" class="float-end text-decoration-underline">Add
                                                 New</a>Select product category</p>
-                                        <select class="form-select" name="product_categories" id="choices-category-input" name="choices-category-input" data-choices data-choices-search-false>
-                                            <option value="Appliances">Appliances</option>
-                                            <option value="Automotive Accessories">Automotive Accessories</option>
-                                            <option value="Electronics">Electronics</option>
-                                            <option value="Fashion">Fashion</option>
-                                            <option value="Furniture">Furniture</option>
-                                            <option value="Grocery">Grocery</option>
-                                            <option value="Kids">Kids</option>
-                                            <option value="Watches">Watches</option>
+                                        <select class="form-select" name="categories_id" id="choices-category-input" name="choices-category-input" data-choices data-choices-search-false>
+                                            @foreach ($categories as $category)
+                                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                            @endforeach
                                         </select>
                                         <span id="product_categories_error" class="text-danger"></span>
                                     </div>
@@ -2884,9 +2895,27 @@ Create Product | Velzon - Admin
 
     <script>
         $(document).ready(function(){
+            
+            $(".spinner-container").hide();
+
             $('.myForm').submit(function(e){
             e.preventDefault();
+
+            $('#message').text('');
+
+            $(".spinner-container").show();
+
             var formData = new FormData(this);
+
+            var fieldNames = [...formData.keys()];
+
+            var filteredFieldNames = fieldNames.filter(function(fieldName) {
+                return fieldName !== '_token';
+            });
+
+            $.each(filteredFieldNames, function(key, value) {
+                $('span[id="' + value + '_error"]').text('');
+            });
             
             $.ajax({
                 url: "{{ route('admin.submit-add-product') }}",
@@ -2894,8 +2923,11 @@ Create Product | Velzon - Admin
                 data: formData,
                 contentType: false,
                 processData: false,
+                beforeSend: function() {
+                    $('.spinner').show();
+                },
                 success: function(response){
-                    console.log(response);
+                    $('#message').removeClass('text-danger').addClass('text-success').text(response.success_message);
                 },
                 error: function(reject){
                     var response = $.parseJSON(reject.responseText);
@@ -2905,7 +2937,9 @@ Create Product | Velzon - Admin
                     $.each(response.errors, function(key, val){
                         $("#" + key + "_error").text(val[0]);
                     })
-
+                },
+                complete: function() {
+                    $(".spinner-container").hide();
                 }
             })
         })

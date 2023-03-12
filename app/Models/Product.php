@@ -7,9 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    protected $table = 'admins';
+    protected $table = 'products';
 
     protected $fillable = [
-        ''
+        'title',
+        'description',
+        'main_image',
+        'gallery_images',
+        'category_id',
+        'slug',
     ];
 }
